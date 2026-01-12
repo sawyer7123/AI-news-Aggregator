@@ -5,6 +5,7 @@ import NewsFeed from './components/NewsFeed';
 import RedditBuzz from './components/RedditBuzz';
 import YouTubeCoverage from './components/YouTubeCoverage';
 import NewAITools from './components/NewAITools';
+import TwitterBuzz from './components/TwitterBuzz';
 import SavedIdeas from './components/SavedIdeas';
 import { useSavedItems } from './hooks/useSavedItems';
 import { fetchAllData } from './services/api';
@@ -41,7 +42,8 @@ export default function App() {
     rss: { items: [] },
     reddit: { items: [] },
     youtube: { items: [] },
-    producthunt: { items: [] }
+    producthunt: { items: [] },
+    twitter: { items: [] }
   });
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -81,7 +83,8 @@ export default function App() {
     ...data.rss.items,
     ...data.reddit.items,
     ...data.youtube.items,
-    ...data.producthunt.items
+    ...data.producthunt.items,
+    ...data.twitter.items
   ], [data]);
 
   const trends = useMemo(() => calculateTrending(allItems), [allItems]);
@@ -101,6 +104,7 @@ export default function App() {
   const filteredReddit = useMemo(() => filterItems(data.reddit.items), [data.reddit.items, searchQuery]);
   const filteredYouTube = useMemo(() => filterItems(data.youtube.items), [data.youtube.items, searchQuery]);
   const filteredProductHunt = useMemo(() => filterItems(data.producthunt.items), [data.producthunt.items, searchQuery]);
+  const filteredTwitter = useMemo(() => filterItems(data.twitter.items), [data.twitter.items, searchQuery]);
   const filteredSaved = useMemo(() => filterItems(savedItems), [savedItems, searchQuery]);
 
   return (
@@ -139,6 +143,13 @@ export default function App() {
 
         <NewAITools
           items={filteredProductHunt}
+          isLoading={isLoading}
+          onSave={saveItem}
+          savedIds={savedIds}
+        />
+
+        <TwitterBuzz
+          items={filteredTwitter}
           isLoading={isLoading}
           onSave={saveItem}
           savedIds={savedIds}

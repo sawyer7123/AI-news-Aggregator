@@ -58,6 +58,12 @@ export default function Card({ item, onSave, onRemove, isSaved }) {
               <span>{formatNumber(item.upvotes)} upvotes</span>
             </div>
           )}
+          {item.type === 'twitter' && (
+            <div className="card-stats">
+              <span>{formatNumber(item.likes)} likes</span>
+              <span>{formatNumber(item.retweets)} retweets</span>
+            </div>
+          )}
         </div>
       </div>
       <div className="card-actions">
