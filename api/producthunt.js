@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     // Query for recent posts, then filter for AI-related ones
     const query = `
       query {
-        posts(first: 50) {
+        posts(first: 20) {
           edges {
             node {
               id
@@ -55,18 +55,7 @@ export default async function handler(req, res) {
               tagline
               url
               votesCount
-              thumbnail {
-                url
-              }
               createdAt
-              topics {
-                edges {
-                  node {
-                    name
-                    slug
-                  }
-                }
-              }
             }
           }
         }
@@ -97,20 +86,17 @@ export default async function handler(req, res) {
       title: node.name,
       description: node.tagline,
       url: node.url,
-      image: node.thumbnail?.url,
+      image: null,
       source: 'Product Hunt',
       publishedAt: node.createdAt,
       upvotes: node.votesCount,
-      topics: node.topics?.edges?.map(t => t.node.name) || [],
-      topicSlugs: node.topics?.edges?.map(t => t.node.slug) || [],
       type: 'producthunt'
     }));
 
     // Filter for AI-related products
     const items = allPosts.filter(post => {
-      const text = `${post.title} ${post.description} ${post.topics.join(' ')}`.toLowerCase();
-      return aiKeywords.some(keyword => text.includes(keyword)) ||
-             post.topicSlugs.some(slug => slug && (slug.includes('ai') || slug.includes('artificial-intelligence') || slug.includes('machine-learning')));
+      const text = `${post.title} ${post.description}`.toLowerCase();
+      return aiKeywords.some(keyword => text.includes(keyword));
     });
 
     console.log(`Product Hunt: Found ${items.length} AI-related posts out of ${allPosts.length} total`);
