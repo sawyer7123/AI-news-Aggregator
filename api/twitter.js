@@ -59,6 +59,10 @@ export default async function handler(req, res) {
     res.status(200).json({ items, source: 'twitter' });
   } catch (error) {
     console.error('Twitter API error:', error.response?.data || error.message);
-    res.status(200).json({ error: 'Failed to fetch tweets', items: [] });
+    res.status(200).json({
+      error: 'Failed to fetch tweets',
+      items: [],
+      debug: error.response?.data || error.message
+    });
   }
 }
