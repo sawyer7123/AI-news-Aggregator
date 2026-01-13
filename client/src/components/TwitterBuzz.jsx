@@ -15,7 +15,7 @@ export default function TwitterBuzz({ items, isLoading, onSave, savedIds }) {
   if (!items || items.length === 0) {
     return (
       <Section title="X/Twitter Buzz">
-        <div className="empty-state">No tweets found. Add TWITTER_BEARER_TOKEN to enable.</div>
+        <div className="empty-state">Twitter API rate limited (free tier: ~1500 tweets/month). Try again in 15 min.</div>
       </Section>
     );
   }
